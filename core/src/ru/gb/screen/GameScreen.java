@@ -2,11 +2,13 @@ package ru.gb.screen;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.ScreenUtils;
 
 import ru.gb.base.BaseScreen;
 import ru.gb.math.Rect;
 import ru.gb.sprite.Background;
+import ru.gb.sprite.Ship;
 import ru.gb.sprite.Star;
 
 public class GameScreen extends BaseScreen {
@@ -15,6 +17,7 @@ public class GameScreen extends BaseScreen {
 
     private Texture bg;
     private TextureAtlas atlas;
+    private Ship ship;
 
     private Background background;
     private Star[] stars;
@@ -29,6 +32,7 @@ public class GameScreen extends BaseScreen {
         for (int i = 0; i < stars.length; i++) {
             stars[i] = new Star(atlas);
         }
+        ship = new Ship(atlas);
     }
 
     @Override
@@ -44,6 +48,7 @@ public class GameScreen extends BaseScreen {
         for (Star star : stars) {
             star.resize(worldBounds);
         }
+        ship.resize(worldBounds);
     }
 
     @Override
@@ -57,6 +62,7 @@ public class GameScreen extends BaseScreen {
         for (Star star : stars) {
             star.update(delta);
         }
+        ship.update(delta);
     }
 
     private void draw() {
@@ -66,6 +72,13 @@ public class GameScreen extends BaseScreen {
         for (Star star : stars) {
             star.draw(batch);
         }
+        ship.draw(batch);
         batch.end();
+    }
+
+    @Override
+    public boolean touchDown(Vector2 touch, int pointer, int button) {
+        ship.touchDown(touch, pointer,button);
+        return false;
     }
 }
