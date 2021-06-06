@@ -168,8 +168,8 @@ public class MainShip extends Sprite {
     }
 
     private void shoot() {
-        long id = sound.play(0.1f);
-        sound.setPitch(id, 2.5f);
+        long id = sound.play(0.05f);
+        sound.setPitch(id, 3f);
         Bullet bullet = bulletPool.obtain();
         bulletPos.set(pos.x, pos.y + getHalfHeight());
         bullet.set(this, bulletRegion, bulletPos, bulletV, worldBounds, 1, 0.01f);
