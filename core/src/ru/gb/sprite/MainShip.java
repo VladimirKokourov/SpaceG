@@ -25,6 +25,7 @@ public class MainShip extends Sprite {
 
     private int leftPointer = INVALID_POINTER;
     private int rightPointer = INVALID_POINTER;
+    private float timer;
 
     private Rect worldBounds;
     private BulletPool bulletPool;
@@ -51,6 +52,11 @@ public class MainShip extends Sprite {
 
     @Override
     public void update(float delta) {
+        timer -= delta;
+        if(timer < 0.0f) {
+            timer = 0.1f;
+            shoot();
+        }
         pos.mulAdd(v, delta);
         if (getRight() > worldBounds.getRight()) {
             setRight(worldBounds.getRight());
