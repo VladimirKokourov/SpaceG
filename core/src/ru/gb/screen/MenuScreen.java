@@ -1,6 +1,8 @@
 package ru.gb.screen;
 
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
@@ -19,6 +21,7 @@ public class MenuScreen extends BaseScreen {
 
     private final Game game;
 
+    private Music music;
     private Texture bg;
     private TextureAtlas atlas;
 
@@ -34,6 +37,7 @@ public class MenuScreen extends BaseScreen {
     @Override
     public void show() {
         super.show();
+        music = Gdx.audio.newMusic(Gdx.files.internal("sounds/music.mp3"));
         bg = new Texture("textures/bg.png");
         background = new Background(bg);
         atlas = new TextureAtlas("textures/menuAtlas.tpack");
@@ -58,6 +62,7 @@ public class MenuScreen extends BaseScreen {
 
     @Override
     public void render(float delta) {
+        playMusic();
         super.render(delta);
         update(delta);
         draw();
@@ -68,6 +73,7 @@ public class MenuScreen extends BaseScreen {
         super.dispose();
         bg.dispose();
         atlas.dispose();
+        music.dispose();
     }
 
     @Override
@@ -90,6 +96,11 @@ public class MenuScreen extends BaseScreen {
         }
     }
 
+    private void playMusic() {
+        music.play();
+        music.setLooping(true);
+    }
+
     private void draw() {
         ScreenUtils.clear(0.33f, 0.45f, 0.68f, 1);
         batch.begin();
@@ -100,5 +111,15 @@ public class MenuScreen extends BaseScreen {
         exitButton.draw(batch);
         playButton.draw(batch);
         batch.end();
+    }
+
+    @Override
+    public void pause() {
+        music.pause();
+    }
+
+    @Override
+    public void resume() {
+        music.play();
     }
 }
