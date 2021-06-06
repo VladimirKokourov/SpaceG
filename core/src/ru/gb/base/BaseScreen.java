@@ -149,4 +149,6 @@ public class BaseScreen implements Screen, InputProcessor {
         System.out.println("scrolled amountX = " + amountX + " amountY = " + amountY);
         return false;
     }
+
+
 }

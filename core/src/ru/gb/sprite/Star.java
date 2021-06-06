@@ -3,9 +3,9 @@ package ru.gb.sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
 
-import ru.gb.base.Sprite;
 import ru.gb.math.Rect;
 import ru.gb.math.Rnd;
+import ru.gb.base.Sprite;
 
 public class Star extends Sprite {
 
