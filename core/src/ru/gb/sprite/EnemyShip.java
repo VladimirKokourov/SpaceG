@@ -56,4 +56,6 @@ public class EnemyShip extends Ship {
         this.hp = hp;
         v.set(0, -0.3f);
     }
+
+
 }
