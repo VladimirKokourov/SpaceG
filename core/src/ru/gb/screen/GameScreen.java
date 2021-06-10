@@ -15,6 +15,7 @@ import ru.gb.math.Rect;
 import ru.gb.pool.BulletPool;
 import ru.gb.pool.EnemyPool;
 import ru.gb.sprite.Background;
+import ru.gb.sprite.Bullet;
 import ru.gb.sprite.EnemyShip;
 import ru.gb.sprite.MainShip;
 import ru.gb.sprite.Star;
@@ -33,7 +34,8 @@ public class GameScreen extends BaseScreen {
     private BulletPool bulletPool;
     private EnemyPool enemyPool;
     private MainShip mainShip;
-    private List<EnemyShip> enemyShips;
+    private List<EnemyShip> enemyShipList;
+    private List<Bullet> bulletList;
 
     private Sound laserSound;
     private Sound bulletSound;
@@ -60,13 +62,14 @@ public class GameScreen extends BaseScreen {
         music = Gdx.audio.newMusic(Gdx.files.internal("sounds/music.mp3"));
         music.setLooping(true);
         music.play();
-
+        enemyShipList = enemyPool.getActiveObjects();
+        bulletList = bulletPool.getActiveObjects();
     }
 
     @Override
     public void render(float delta) {
         update(delta);
-        contactShips();
+        contactAndHitEnemyShips();
         freeAllDestroyed();
         draw();
     }
@@ -125,7 +128,6 @@ public class GameScreen extends BaseScreen {
         bulletPool.updateActiveSprites(delta);
         enemyPool.updateActiveSprites(delta);
         enemyEmitter.generate(delta);
-        enemyShips = enemyPool.getActiveObjects();
     }
 
     private void freeAllDestroyed() {
@@ -146,12 +148,18 @@ public class GameScreen extends BaseScreen {
         batch.end();
     }
 
-    private void contactShips() {
-        for (EnemyShip enemyShip: enemyShips) {
-            if(!mainShip.isOutside(enemyShip)){
+    private void contactAndHitEnemyShips() {
+        for (EnemyShip enemyShip : enemyShipList) {
+            if (!mainShip.isOutside(enemyShip)) {
                 enemyShip.destroy();
             }
+            for (Bullet bullet : bulletList) {
+                if (!bullet.isOutside(enemyShip)) {
+                    if(bullet.getOwner() == mainShip) {
+                        enemyShip.destroy();
+                    }
+                }
+            }
         }
-
     }
 }
