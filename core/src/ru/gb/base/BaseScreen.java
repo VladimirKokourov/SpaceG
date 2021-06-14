@@ -16,7 +16,7 @@ public class BaseScreen implements Screen, InputProcessor {
     protected SpriteBatch batch;
 
     private Rect screenBounds;
-    private Rect worldBounds;
+    protected Rect worldBounds;
     private Rect glBounds;
 
     private Matrix4 worldToGl;
@@ -149,6 +149,4 @@ public class BaseScreen implements Screen, InputProcessor {
         System.out.println("scrolled amountX = " + amountX + " amountY = " + amountY);
         return false;
     }
-
-
 }
