@@ -61,7 +61,7 @@ public class GameScreen extends BaseScreen {
             stars[i] = new Star(atlas);
         }
         gameOver = new GameOver(atlas);
-        newGameButton = new NewGameButton(atlas);
+        newGameButton = new NewGameButton(atlas, this);
         bulletPool = new BulletPool();
         explosionSound = Gdx.audio.newSound(Gdx.files.internal("sounds/explosion.wav"));
         explosionPool = new ExplosionPool(atlas, explosionSound);
@@ -73,6 +73,14 @@ public class GameScreen extends BaseScreen {
         music = Gdx.audio.newMusic(Gdx.files.internal("sounds/music.mp3"));
         music.setLooping(true);
         music.play();
+        state = State.PLAYING;
+    }
+
+    public void startNewGame() {
+        mainShip.startNewGame();
+        bulletPool.freeAllActiveObjects();
+        enemyPool.freeAllActiveObjects();
+        explosionPool.freeAllActiveObjects();
         state = State.PLAYING;
     }
 
@@ -156,6 +164,8 @@ public class GameScreen extends BaseScreen {
             bulletPool.updateActiveSprites(delta);
             enemyPool.updateActiveSprites(delta);
             enemyEmitter.generate(delta);
+        } else if (state == State.GAME_OVER) {
+            newGameButton.update(delta);
         }
     }
 
