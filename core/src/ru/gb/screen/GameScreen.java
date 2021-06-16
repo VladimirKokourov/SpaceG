@@ -20,14 +20,14 @@ import ru.gb.sprite.Bullet;
 import ru.gb.sprite.EnemyShip;
 import ru.gb.sprite.GameOver;
 import ru.gb.sprite.MainShip;
+import ru.gb.sprite.NewGameButton;
 import ru.gb.sprite.Star;
+import ru.gb.sprite.State;
 import ru.gb.utils.EnemyEmitter;
 
 public class GameScreen extends BaseScreen {
 
     private static final int STAR_COUNT = 64;
-
-    private enum State {PLAYING, GAME_OVER}
 
     private Texture bg;
     private TextureAtlas atlas;
@@ -35,13 +35,12 @@ public class GameScreen extends BaseScreen {
     private Background background;
     private Star[] stars;
     private GameOver gameOver;
+    private NewGameButton newGameButton;
 
     private BulletPool bulletPool;
     private EnemyPool enemyPool;
     private ExplosionPool explosionPool;
     private MainShip mainShip;
-    private List<EnemyShip> enemyShipList;
-    private List<Bullet> bulletList;
 
     private Sound explosionSound;
     private Sound laserSound;
@@ -62,6 +61,7 @@ public class GameScreen extends BaseScreen {
             stars[i] = new Star(atlas);
         }
         gameOver = new GameOver(atlas);
+        newGameButton = new NewGameButton(atlas);
         bulletPool = new BulletPool();
         explosionSound = Gdx.audio.newSound(Gdx.files.internal("sounds/explosion.wav"));
         explosionPool = new ExplosionPool(atlas, explosionSound);
@@ -93,6 +93,7 @@ public class GameScreen extends BaseScreen {
         }
         mainShip.resize(worldBounds);
         gameOver.resize(worldBounds);
+        newGameButton.resize(worldBounds);
     }
 
     @Override
@@ -129,6 +130,8 @@ public class GameScreen extends BaseScreen {
     public boolean touchDown(Vector2 touch, int pointer, int button) {
         if (state == State.PLAYING) {
             mainShip.touchDown(touch, pointer, button);
+        } else if (state == State.GAME_OVER) {
+            newGameButton.touchDown(touch, pointer, button);
         }
         return false;
     }
@@ -137,6 +140,8 @@ public class GameScreen extends BaseScreen {
     public boolean touchUp(Vector2 touch, int pointer, int button) {
         if (state == State.PLAYING) {
             mainShip.touchUp(touch, pointer, button);
+        } else if (state == State.GAME_OVER) {
+            newGameButton.touchUp(touch, pointer, button);
         }
         return false;
     }
@@ -212,6 +217,7 @@ public class GameScreen extends BaseScreen {
             enemyPool.drawActiveSprites(batch);
         } else {
             gameOver.draw(batch);
+            newGameButton.draw(batch);
         }
         explosionPool.drawActiveSprites(batch);
         batch.end();
