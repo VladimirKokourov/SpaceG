@@ -78,6 +78,10 @@ public class Ship extends Sprite {
         return hp;
     }
 
+    public void setHp(int hp) {
+        this.hp = hp;
+    }
+
     public Vector2 getV() {
         return v;
     }

@@ -60,6 +60,7 @@ public class GameScreen extends BaseScreen {
     private State state;
 
     private int frags;
+    private int count;
 
     private Font font;
     private StringBuilder sbFrags;
@@ -95,6 +96,7 @@ public class GameScreen extends BaseScreen {
         music.setLooping(true);
         music.play();
         frags = 0;
+        count = enemyEmitter.getLevel();
         state = State.PLAYING;
     }
 
@@ -103,12 +105,15 @@ public class GameScreen extends BaseScreen {
         bulletPool.freeAllActiveObjects();
         enemyPool.freeAllActiveObjects();
         explosionPool.freeAllActiveObjects();
+        frags = 0;
+        enemyEmitter.setLevel(1);
         state = State.PLAYING;
     }
 
     @Override
     public void render(float delta) {
         update(delta);
+        levelUp();
         checkCollisions();
         freeAllDestroyed();
         draw();
@@ -267,5 +272,12 @@ public class GameScreen extends BaseScreen {
         font.draw(batch, sbFrags.append(FRAGS).append(frags), worldBounds.getLeft() + PADDING, worldBounds.getTop() - PADDING);
         font.draw(batch, sbHP.append(HP).append(mainShip.getHp()), worldBounds.pos.x, worldBounds.getTop() - PADDING, Align.center);
         font.draw(batch, sbLevel.append(LEVEL).append(enemyEmitter.getLevel()), worldBounds.getRight() - PADDING, worldBounds.getTop() - PADDING, Align.right);
+    }
+
+    private void levelUp() {
+        if(enemyEmitter.getLevel() != count) {
+            mainShip.setHp(mainShip.getHp() + 10);
+            count = enemyEmitter.getLevel();
+        }
     }
 }
