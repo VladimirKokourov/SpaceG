@@ -9,10 +9,12 @@ import ru.gb.pool.BulletPool;
 import ru.gb.pool.ExplosionPool;
 import ru.gb.sprite.Bullet;
 import ru.gb.sprite.Explosion;
+import ru.gb.utils.EnemyEmitter;
 
 public class Ship extends Sprite {
 
     private static final float DAMAGE_ANIMATE_INTERVAL = 0.1f;
+    private static final int IMPROVE_SHIP_LEVEL = 10;
 
     protected Vector2 v0;
     protected Vector2 v;
@@ -23,10 +25,13 @@ public class Ship extends Sprite {
     protected TextureRegion bulletRegion;
     protected Vector2 bulletV;
     protected Vector2 bulletPos;
+    protected Vector2 doubleBulletPosLeft;
+    protected Vector2 doubleBulletPosRight;
     protected Sound bulletSound;
     protected float bulletHeight;
     protected int damage;
     protected int hp;
+    protected int level;
 
     protected float reloadInterval;
     protected float reloadTimer;
@@ -46,7 +51,11 @@ public class Ship extends Sprite {
         reloadTimer += delta;
         if (reloadTimer >= reloadInterval) {
             reloadTimer = 0;
-            shoot();
+            if(level < IMPROVE_SHIP_LEVEL) {
+                shoot();
+            } else {
+                doubleShoot();
+            }
         }
         damageAnimateTimer += delta;
         if (damageAnimateTimer >= DAMAGE_ANIMATE_INTERVAL) {
@@ -74,9 +83,33 @@ public class Ship extends Sprite {
         return damage;
     }
 
+    public int getHp() {
+        return hp;
+    }
+
+    public void setHp(int hp) {
+        this.hp = hp;
+    }
+
+    public Vector2 getV() {
+        return v;
+    }
+
+    public void setBulletPos(Vector2 bulletPos) {
+        this.bulletPos.set(bulletPos);
+    }
+
     private void shoot() {
         Bullet bullet = bulletPool.obtain();
         bullet.set(this, bulletRegion, bulletPos, bulletV, worldBounds, damage, bulletHeight);
+        bulletSound.play();
+    }
+
+    private void doubleShoot() {
+        Bullet bulletLeft = bulletPool.obtain();
+        Bullet bulletRight = bulletPool.obtain();
+        bulletLeft.set(this, bulletRegion, doubleBulletPosLeft, bulletV, worldBounds, damage, bulletHeight);
+        bulletRight.set(this, bulletRegion, doubleBulletPosRight, bulletV, worldBounds, damage, bulletHeight);
         bulletSound.play();
     }
 

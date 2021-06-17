@@ -9,8 +9,11 @@ import ru.gb.base.Ship;
 import ru.gb.math.Rect;
 import ru.gb.pool.BulletPool;
 import ru.gb.pool.ExplosionPool;
+import ru.gb.utils.EnemyEmitter;
 
 public class MainShip extends Ship {
+
+    private static final int HP = 100;
 
     private static final float HEIGHT = 0.15f;
     private static final float PADDING = 0.05f;
@@ -31,12 +34,31 @@ public class MainShip extends Ship {
         this.bulletSound = bulletSound;
         this.bulletV = new Vector2(0, 0.5f);
         this.bulletPos = new Vector2();
+        this.doubleBulletPosLeft = new Vector2();
+        this.doubleBulletPosRight = new Vector2();
         v0 = new Vector2(0.5f, 0);
         v = new Vector2();
         reloadInterval = RELOAD_INTERVAL;
         bulletHeight = 0.01f;
         damage = 1;
-        hp = 100;
+        level = 1;
+        hp = HP;
+    }
+
+    public void levelUp() {
+        hp += 10;
+        level++;
+    }
+
+    public void startNewGame() {
+        hp = HP;
+        this.pos.x = worldBounds.pos.x;
+        stop();
+        pressedLeft = false;
+        pressedRight = false;
+        leftPointer = INVALID_POINTER;
+        rightPointer = INVALID_POINTER;
+        flushDestroy();
     }
 
     @Override
@@ -49,7 +71,9 @@ public class MainShip extends Ship {
     @Override
     public void update(float delta) {
         super.update(delta);
-        bulletPos.set(pos.x, pos.y + getHalfHeight());
+        bulletPos.set(pos.x, pos.y + getHalfWidth());
+        doubleBulletPosLeft.set(pos.x - getHalfWidth(), pos.y);
+        doubleBulletPosRight.set(pos.x + getHalfWidth(), pos.y);
         if (getRight() > worldBounds.getRight()) {
             setRight(worldBounds.getRight());
             stop();
