@@ -60,7 +60,7 @@ public class GameScreen extends BaseScreen {
     private State state;
 
     private int frags;
-    private int count;
+    private int countLevel;
 
     private Font font;
     private StringBuilder sbFrags;
@@ -96,7 +96,7 @@ public class GameScreen extends BaseScreen {
         music.setLooping(true);
         music.play();
         frags = 0;
-        count = enemyEmitter.getLevel();
+        countLevel = enemyEmitter.getLevel();
         state = State.PLAYING;
     }
 
@@ -275,9 +275,10 @@ public class GameScreen extends BaseScreen {
     }
 
     private void levelUp() {
-        if(enemyEmitter.getLevel() != count) {
-            mainShip.setHp(mainShip.getHp() + 10);
-            count = enemyEmitter.getLevel();
+
+        if(enemyEmitter.getLevel() != countLevel) {
+            mainShip.levelUp();
+            countLevel = enemyEmitter.getLevel();
         }
     }
 }
