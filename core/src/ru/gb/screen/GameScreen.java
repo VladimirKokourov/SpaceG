@@ -54,6 +54,7 @@ public class GameScreen extends BaseScreen {
     private Sound explosionSound;
     private Sound laserSound;
     private Sound bulletSound;
+    private Sound lvlUpSound;
     private Music music;
 
     private EnemyEmitter enemyEmitter;
@@ -81,6 +82,7 @@ public class GameScreen extends BaseScreen {
         bulletSound = Gdx.audio.newSound(Gdx.files.internal("sounds/bullet.wav"));
         enemyPool = new EnemyPool(worldBounds, explosionPool, bulletPool, bulletSound);
         laserSound = Gdx.audio.newSound(Gdx.files.internal("sounds/laser.wav"));
+        lvlUpSound = Gdx.audio.newSound(Gdx.files.internal("sounds/lvlup.mp3"));
         mainShip = new MainShip(atlas, explosionPool, bulletPool, laserSound);
         stars = new TrackingStar[STAR_COUNT];
         for (int i = 0; i < stars.length; i++) {
@@ -142,6 +144,7 @@ public class GameScreen extends BaseScreen {
         explosionSound.dispose();
         bulletSound.dispose();
         laserSound.dispose();
+        lvlUpSound.dispose();
         music.dispose();
         font.dispose();
     }
@@ -275,9 +278,9 @@ public class GameScreen extends BaseScreen {
     }
 
     private void levelUp() {
-
         if(enemyEmitter.getLevel() != countLevel) {
             mainShip.levelUp();
+            lvlUpSound.play();
             countLevel = enemyEmitter.getLevel();
         }
     }
